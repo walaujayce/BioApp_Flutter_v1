@@ -96,6 +96,7 @@ class _UploadedListCardState extends ConsumerState<UploadedListCard> {
           // SUBTITLE
           subtitle: Text(
             widget.species.description ?? "",
+            // widget.species.id,
             style: TextStyle(fontSize: 10.0),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,

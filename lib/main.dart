@@ -2,15 +2,24 @@ import 'package:bio_app/components/capture_image_fab.dart';
 import 'package:bio_app/views/home_page.dart';
 import 'package:bio_app/views/introduction_page.dart';
 import 'package:bio_app/views/login_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'components/bottom_nav_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-void main() {
-  // WidgetsFlutterBinding.ensureInitialized();
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
+  if (kDebugMode) {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('uploaded_species_list'); //TODO 這裏是爲了清楚暫存區
+    // 或 prefs.clear(); ⚠️ 會清全部
+  }
+
   runApp(ProviderScope(child: const MyApp()));
 }
 

@@ -4,8 +4,15 @@ class InputTextField extends StatelessWidget {
   final String title;
   final TextEditingController? inputController;
   final TextInputType? keyboardType;
+  final bool readOnly;
 
-  const InputTextField({super.key, required this.title, this.inputController, this.keyboardType = TextInputType.multiline});
+  const InputTextField({
+    super.key,
+    required this.title,
+    this.inputController,
+    this.keyboardType = TextInputType.multiline,
+    this.readOnly = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +22,7 @@ class InputTextField extends StatelessWidget {
         maxLines: 3,
         keyboardType: keyboardType,
         controller: inputController,
+        readOnly: readOnly,
         decoration: InputDecoration(
           // filled: true,
           // fillColor: Colors.red,
@@ -59,17 +67,20 @@ class InputTextField extends StatelessWidget {
 class InputTextFormField extends StatelessWidget {
   final String title;
   final TextEditingController inputController;
+  final bool readOnly;
 
   const InputTextFormField({
     super.key,
     required this.title,
     required this.inputController,
+    this.readOnly = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: inputController,
+      readOnly: readOnly,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "$title is required";
@@ -82,7 +93,6 @@ class InputTextFormField extends StatelessWidget {
         labelText: title,
         // Default border when the TextField is enabled but not focused
         enabledBorder: OutlineInputBorder(
-
           borderSide: BorderSide(
             color: Color(
               0xFFDDDCDC,
@@ -107,8 +117,8 @@ class InputTextFormField extends StatelessWidget {
         // Border when there's an error and the TextField is focused
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors
-                .redAccent, // Your desired color for focused error state
+            color:
+                Colors.redAccent, // Your desired color for focused error state
             width: 2.0,
           ),
         ),
@@ -117,13 +127,17 @@ class InputTextFormField extends StatelessWidget {
   }
 }
 
-
 class DateTimeTextField extends StatelessWidget {
   final String title;
   final TextEditingController? inputController;
   final VoidCallback? onTap;
 
-  const DateTimeTextField({super.key, required this.title, this.inputController, this.onTap});
+  const DateTimeTextField({
+    super.key,
+    required this.title,
+    this.inputController,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -172,4 +186,3 @@ class DateTimeTextField extends StatelessWidget {
     );
   }
 }
-

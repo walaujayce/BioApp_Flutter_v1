@@ -20,7 +20,7 @@ final class UploadedListNotifierProvider
         argument: null,
         retry: null,
         name: r'uploadedListProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -42,7 +42,7 @@ final class UploadedListNotifierProvider
 }
 
 String _$uploadedListNotifierHash() =>
-    r'1aa9f92223639fdbfddc056b343bdec0cd4ba2d8';
+    r'690981c292dcf36e3cf8ac7a796e8004361a4198';
 
 abstract class _$UploadedListNotifier extends $Notifier<List<Species>> {
   List<Species> build();

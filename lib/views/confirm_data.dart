@@ -74,8 +74,7 @@ class _ConfirmDataPageState extends ConsumerState<ConfirmDataPage> {
     final location = ref.read(locationProvider).value;
 
     if (location == null) return;
-    final int speciesListLength =
-        ref.watch(uploadedListProvider).length + 1;
+    final int speciesListLength = ref.watch(uploadedListProvider).length + 1;
     ref
         .read(uploadedListProvider.notifier)
         .add(
@@ -104,6 +103,9 @@ class _ConfirmDataPageState extends ConsumerState<ConfirmDataPage> {
         ? DateTime.now()
         : widget.existedSpecies!.imageTakenTime;
     final location = ref.watch(locationProvider).value;
+    bool readOnly = widget.type == DataViewType.uploadMode
+        ? false
+        : (widget.existedSpecies!.isUploaded ? true : false);
 
     return LoaderOverlay(
       child: Scaffold(
@@ -122,10 +124,7 @@ class _ConfirmDataPageState extends ConsumerState<ConfirmDataPage> {
                 ),
                 background: widget.type == DataViewType.modifyMode
                     ? (widget.existedSpecies!.imageUrl.contains("data")
-                          ? Image.file(
-                              File(imagePath),
-                              fit: BoxFit.cover,
-                            )
+                          ? Image.file(File(imagePath), fit: BoxFit.cover)
                           : Image.asset(imagePath, fit: BoxFit.cover))
                     : Image.file(
                         File(widget.uploadImagePath!),
@@ -140,6 +139,7 @@ class _ConfirmDataPageState extends ConsumerState<ConfirmDataPage> {
                   InputTextFormField(
                     title: "物種名稱",
                     inputController: _speciesNameController,
+                    readOnly: readOnly,
                   ),
                   SizedBox(height: 20.0),
                   Text("發現時間"),
@@ -157,16 +157,19 @@ class _ConfirmDataPageState extends ConsumerState<ConfirmDataPage> {
                   InputTextField(
                     title: "詳細資訊",
                     inputController: _descriptionController,
+                    readOnly: readOnly,
                   ),
                   SizedBox(height: 20.0),
-                  TextButton(
-                    onPressed: onSubmit,
-                    style: TextButton.styleFrom(
-                      backgroundColor: Colors.blue, // Set the background color
-                      foregroundColor: Colors.white, // Set the text color
+                  if (!readOnly)
+                    TextButton(
+                      onPressed: onSubmit,
+                      style: TextButton.styleFrom(
+                        backgroundColor:
+                            Colors.blue, // Set the background color
+                        foregroundColor: Colors.white, // Set the text color
+                      ),
+                      child: Text("Submit"),
                     ),
-                    child: Text("Submit"),
-                  ),
                 ]),
               ),
             ),

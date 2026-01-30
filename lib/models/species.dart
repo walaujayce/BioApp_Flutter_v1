@@ -1,4 +1,4 @@
-class Species{
+class Species {
   final String id;
   final String speciesName;
   final String imageUrl;
@@ -18,7 +18,7 @@ class Species{
     required this.latitude,
     required this.longitude,
     this.description,
-    this.isLocalImage = false
+    this.isLocalImage = false,
   });
 
   Species copyWith({
@@ -31,7 +31,7 @@ class Species{
     double? longitude,
     String? description,
     bool? isLocalImage,
-}){
+  }) {
     return Species(
       id: id ?? this.id,
       speciesName: speciesName ?? this.speciesName,
@@ -44,6 +44,28 @@ class Species{
       isLocalImage: isLocalImage ?? this.isLocalImage,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'speciesName': speciesName,
+    'description': description,
+    'imageUrl': imageUrl,
+    'imageTakenTime': imageTakenTime.toIso8601String(),
+    'latitude': latitude,
+    'longitude': longitude,
+    'isLocalImage': isLocalImage,
+  };
+
+  factory Species.fromJson(Map<String, dynamic> json) => Species(
+    id: json['id'],
+    speciesName: json['speciesName'],
+    description: json['description'],
+    imageUrl: json['imageUrl'],
+    imageTakenTime: DateTime.parse(json['imageTakenTime']),
+    latitude: json['latitude'],
+    longitude: json['longitude'],
+    isLocalImage: json['isLocalImage'],
+  );
 }
 
 List<Species> speciesTemplateList = [
