@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:bio_app/models/species.dart';
-import 'package:bio_app/views/uploaded_list.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../config/prefs_config.dart';
 
 part 'uploaded_list_provider.g.dart';
 
@@ -46,7 +45,6 @@ part 'uploaded_list_provider.g.dart';
 // }
 @Riverpod(keepAlive: true)
 class UploadedListNotifier extends _$UploadedListNotifier {
-  static const _storageKey = 'uploaded_species_list';
 
   @override
   List<Species> build() {
@@ -79,13 +77,13 @@ class UploadedListNotifier extends _$UploadedListNotifier {
   Future<void> _saveToStorage() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonList = state.map((e) => jsonEncode(e.toJson())).toList();
-    await prefs.setStringList(_storageKey, jsonList);
+    await prefs.setStringList(StorageKeys.uploadedSpeciesList, jsonList);
   }
 
   // 📥 讀
   Future<void> _loadFromStorage() async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonList = prefs.getStringList(_storageKey);
+    final jsonList = prefs.getStringList(StorageKeys.uploadedSpeciesList);
 
     if (jsonList == null) return;
 
@@ -98,7 +96,7 @@ class UploadedListNotifier extends _$UploadedListNotifier {
   Future<void> clear() async {
     state = [];
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_storageKey);
+    await prefs.remove(StorageKeys.uploadedSpeciesList);
   }
 }
 

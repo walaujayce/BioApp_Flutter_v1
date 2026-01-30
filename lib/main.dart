@@ -10,13 +10,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'components/bottom_nav_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'config/prefs_config.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   if (kDebugMode) {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('uploaded_species_list'); //TODO 這裏是爲了清楚暫存區
+    await prefs.remove(StorageKeys.uploadedSpeciesList); //TODO 這裏是爲了清楚暫存區
     // 或 prefs.clear(); ⚠️ 會清全部
   }
 
@@ -36,8 +38,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         textTheme: GoogleFonts.notoSansTcTextTheme(Theme.of(context).textTheme),
       ),
-      home: const MyHomePage(),
-      // home: IntroductionPage(),
+      // home: const MyHomePage(),
+      home: IntroductionPage(),
       // home: LoginPage(),
     );
   }

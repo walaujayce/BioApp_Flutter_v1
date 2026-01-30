@@ -42,7 +42,7 @@ final class UploadedListNotifierProvider
 }
 
 String _$uploadedListNotifierHash() =>
-    r'690981c292dcf36e3cf8ac7a796e8004361a4198';
+    r'411d7adb2b1841c7e16745d4c3fa13c71ca94b19';
 
 abstract class _$UploadedListNotifier extends $Notifier<List<Species>> {
   List<Species> build();

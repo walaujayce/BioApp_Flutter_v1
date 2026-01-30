@@ -1,10 +1,12 @@
 import 'package:bio_app/providers/location_provider.dart';
+import 'package:bio_app/providers/uploaded_list_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../config/prefs_config.dart';
 import '../utils/get_location.dart';
 
 // BitmapDescriptor customIcon = await BitmapDescriptor.asset(
@@ -78,14 +80,14 @@ class NearbySpeciesView extends ConsumerWidget {
         });
   }
 }
-class NearbySpecies extends StatefulWidget {
+class NearbySpecies extends ConsumerStatefulWidget {
   const NearbySpecies({super.key});
 
   @override
-  State<NearbySpecies> createState() => _NearbySpeciesState();
+  ConsumerState<NearbySpecies> createState() => _NearbySpeciesState();
 }
 
-class _NearbySpeciesState extends State<NearbySpecies> {
+class _NearbySpeciesState extends ConsumerState<NearbySpecies> {
   static final CameraPosition _taiwan = CameraPosition(
     target: LatLng(23.973861, 120.982),
     zoom: 7.0,
@@ -113,12 +115,12 @@ class _NearbySpeciesState extends State<NearbySpecies> {
     }
     final prefs = await SharedPreferences.getInstance();
 
-    if (prefs.containsKey("latitude") && prefs.containsKey("longitude")) {
+    if (prefs.containsKey(StorageKeys.currentLatitude) && prefs.containsKey(StorageKeys.currentLongitude)) {
       setState(() {
         _initialPosition = CameraPosition(
           target: LatLng(
-            prefs.getDouble("latitude")!,
-            prefs.getDouble("longitude")!,
+            prefs.getDouble(StorageKeys.currentLatitude)!,
+            prefs.getDouble(StorageKeys.currentLongitude)!,
           ),
           zoom: 16.0,
         );
@@ -143,8 +145,8 @@ class _NearbySpeciesState extends State<NearbySpecies> {
     );
 
     final prefs = await SharedPreferences.getInstance();
-    prefs.setDouble("latitude", position.latitude);
-    prefs.setDouble("longitude", position.longitude);
+    prefs.setDouble(StorageKeys.currentLatitude, position.latitude);
+    prefs.setDouble(StorageKeys.currentLongitude, position.longitude);
   }
 
   // FILTER BUTTON
@@ -176,6 +178,14 @@ class _NearbySpeciesState extends State<NearbySpecies> {
   @override
   Widget build(BuildContext context) {
     if(_initialPosition == null) return Center(child: Text("無法取得位置！"));
+    final Set<Marker> resultList = filteredMarkerList;
+    final storedList = ref.watch(uploadedListProvider);
+    for (var element in storedList) {
+      resultList.add(Marker(
+        markerId: MarkerId(element.id),
+        position: LatLng(element.latitude, element.longitude),
+      ));
+    }
     return Stack(
       children: [
         GoogleMap(
@@ -186,7 +196,7 @@ class _NearbySpeciesState extends State<NearbySpecies> {
             _controller = controller;
             await _moveToCurrentLocation();
           },
-          markers: filteredMarkerList,
+          markers: resultList,
         ),
         // FILTER BUTTON
         Positioned(
